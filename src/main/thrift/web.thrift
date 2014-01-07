@@ -6,6 +6,3 @@ service ProfileService {
   bool modify (1: user.Profile user),
   bool remove (1: user.Profile user)
 }
-
-
-

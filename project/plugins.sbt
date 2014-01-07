@@ -1,5 +1,3 @@
-resolvers += "twitter-repo" at "http://maven.twttr.com"
+resolvers += "bigtoast-github" at "http://bigtoast.github.com/repo/"
 
-addSbtPlugin("com.twitter" % "sbt11-scrooge" % "3.0.0")
-
-addSbtPlugin("com.twitter" % "sbt-package-dist" % "1.0.0")
+addSbtPlugin("com.github.bigtoast" % "sbt-thrift" % "0.7")
