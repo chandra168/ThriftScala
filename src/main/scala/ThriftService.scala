@@ -19,7 +19,7 @@ class ThriftService extends Actor {
     case _:Http.Connected => sender ! Http.Register (self)
 
     case HttpRequest (POST, Uri.Path ("/"), headers, entity: HttpEntity.NonEmpty, protocol) =>
-    /* Do Something */
+    println ("Here")
   
 
     case _:HttpRequest => sender ! HttpResponse (status = 404, entity = "Unknonw resource!")
