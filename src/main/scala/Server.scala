@@ -7,11 +7,12 @@ import org.apache.thrift.protocol.TJSONProtocol;
 
 
 
+/*
 object Server {
 
   def main (args: Array[String]) {
 
-    /* XXX : Not sure if val or var should be passed in Java */
+    // Not sure if val or var should be passed to java 
     var serverHandler = new ProfileServiceImpl ()
     var processor = new ProfileService.Processor (serverHandler)
     var proto     = new TJSONProtocol.Factory ()
@@ -23,4 +24,19 @@ object Server {
 
     server.serve ()
   }
+}
+ */
+
+import akka.actor.{ActorSystem, Props}
+import akka.io.IO
+import spray.can.Http
+
+object Main extends App {
+
+  implicit val system = ActorSystem ()
+
+  // the handler actor replies to incoming HttpRequests
+  val handler = system.actorOf (Props[ThriftService], name = "handler")
+
+  IO (Http) ! Http.Bind (handler, interface = "localhost", port = 9090)
 }
