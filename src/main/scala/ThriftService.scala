@@ -8,6 +8,7 @@ import spray.http._
 import spray.http.HttpHeaders._
 import spray.http.ContentType._
 import HttpMethods._
+import MediaTypes._
 
 import org.apache.thrift.transport.TMemoryBuffer
 import org.apache.thrift.protocol.TJSONProtocol
@@ -40,7 +41,6 @@ class ThriftService extends Actor {
       println (str)
       str
 
-
     } catch {
         case ex: Exception  => "Error:"+ ex.getMessage ()
       }
@@ -51,9 +51,26 @@ class ThriftService extends Actor {
     // When a new connection comes in we register ourselves as the connection handler
     case _:Http.Connected => sender ! Http.Register (self)
 
+    case HttpRequest (GET, Uri.Path ("/"), _, _, _) =>
+      val source = scala.io.Source.fromFile ("client/main.html")
+      val lines = source.mkString  
+      source.close ()
+      sender ! HttpResponse (entity = HttpEntity (`text/html`, lines))
+
+    case HttpRequest (GET, Uri.Path (path), headers, _, _) =>
+      println (path)
+      val new_path = "client".concat (path);
+      val source = scala.io.Source.fromFile (new_path)
+      val lines = source.mkString  
+      source.close ()
+      sender ! HttpResponse (entity = HttpEntity (`text/plain`, lines))
+
+
+
+      
+
     case HttpRequest (POST, Uri.Path ("/"), headers, entity: HttpEntity.NonEmpty, protocol) =>
-      val response: HttpResponse = HttpResponse (entity= thriftRequest (entity.asString.getBytes))
-      sender ! response.withHeaders (List (`Content-Type`(ContentTypes.`text/plain`)))
+      sender ! HttpResponse (entity = HttpEntity (`text/plain`, thriftRequest (entity.asString.getBytes)))
 
       
   

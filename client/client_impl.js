@@ -1,4 +1,4 @@
-var transport = new Thrift.Transport("http://localhost:9090/");
+var transport = new Thrift.Transport("/");
 var protocol  = new Thrift.Protocol(transport);
 var client    = new ProfileServiceClient(protocol);
 
