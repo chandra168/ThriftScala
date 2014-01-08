@@ -1,18 +1,64 @@
+import org.apache.thrift.TSerializer
+import org.apache.thrift.TDeserializer
+
+import java.io.FileNotFoundException
+import java.io.IOException
+
+
 class ProfileServiceImpl extends ProfileService.Iface {
+
+  private def userExists (uid: String): Boolean = false
 
   def createUser (user: Profile): Boolean = {
     println ("CreateUser")
-    true
+
+    /* Check if file exists, otherwise serialize and create it */
+    try 
+    {
+      scala.io.Source.fromFile (user.uid)
+      false
+    } 
+    catch
+    {
+      case ex: FileNotFoundException => 
+      println ("User does not exist");
+      true
+    }
   }
 
+  /* TODO : Change return type for failure */
   def login (uid: String, password: String): Profile = {
      println ("Login")
-     new Profile
+
+     try {
+       val source = scala.io.Source.fromFile (uid)
+       val bytearray = source.map (_.toByte).toArray
+       source.close ()
+
+       // by default uses a binary protocol
+       var deserializer = new TDeserializer ()
+       var user = new Profile
+       deserializer.deserialize (user, bytearray)
+       user
+     } catch {
+       case ex: FileNotFoundException => new Profile
+       case ex: IOException => new Profile
+     }
   }
 
   def modify (user: Profile): Boolean = {
     println ("Modify")
-    true
+    try
+    {
+      scala.io.Source.fromFile (user.uid)
+
+      true
+    }
+    catch
+    {
+      case ex:FileNotFoundException => 
+        false
+    }
   }
   
   def remove (user: Profile): Boolean = {

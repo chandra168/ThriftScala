@@ -5,6 +5,8 @@ import akka.actor._
 import spray.can.Http
 import spray.util._
 import spray.http._
+import spray.http.HttpHeaders._
+import spray.http.ContentType._
 import HttpMethods._
 
 import org.apache.thrift.transport.TMemoryBuffer
@@ -34,7 +36,10 @@ class ThriftService extends Actor {
       val output = new Array[Byte] (outbuffer.length)
       outbuffer.readAll (output, 0, output.length)
 
-      new String (output, "UTF-8")
+      val str = new String (output, "UTF-8")
+      println (str)
+      str
+
 
     } catch {
         case ex: Exception  => "Error:"+ ex.getMessage ()
@@ -47,8 +52,8 @@ class ThriftService extends Actor {
     case _:Http.Connected => sender ! Http.Register (self)
 
     case HttpRequest (POST, Uri.Path ("/"), headers, entity: HttpEntity.NonEmpty, protocol) =>
-      val ip = entity.asString
-      sender ! HttpResponse (entity = thriftRequest (ip.getBytes))
+      val response: HttpResponse = HttpResponse (entity= thriftRequest (entity.asString.getBytes))
+      sender ! response.withHeaders (List (`Content-Type`(ContentTypes.`text/plain`)))
 
       
   

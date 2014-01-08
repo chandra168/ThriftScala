@@ -36,4 +36,6 @@ function create_user () {
   } catch (e) {
     alert (e.why);
   }
+
+  return false;
 }
