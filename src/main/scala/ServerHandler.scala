@@ -3,9 +3,13 @@ import org.apache.thrift.TDeserializer
 
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.File
+import java.io.FileOutputStream
 
 
 class ProfileServiceImpl extends ProfileService.Iface {
+
+  private val prefix = "ProfileDB/"
 
   private def userExists (uid: String): Boolean = false
 
@@ -13,16 +17,22 @@ class ProfileServiceImpl extends ProfileService.Iface {
     println ("CreateUser")
 
     /* Check if file exists, otherwise serialize and create it */
-    try 
-    {
-      scala.io.Source.fromFile (user.uid)
-      false
-    } 
-    catch
-    {
-      case ex: FileNotFoundException => 
-      println ("User does not exist");
+    if ((new File (prefix + user.uid)).createNewFile ()) {
+      // File creation successfull, user does not exist yet
+
+      var sbarr = (new TSerializer ()).serialize (user)
+
+      // Write out to a file
+      val fos = new FileOutputStream (new File (prefix + user.uid))
+      // IOUtils.write (sbarr, fos)
+      fos.write (sbarr)
+      fos.close ()
+
       true
+    }
+    else {
+      // File already exists
+      false
     }
   }
 
@@ -45,6 +55,7 @@ class ProfileServiceImpl extends ProfileService.Iface {
        case ex: IOException => new Profile
      }
   }
+
 
   def modify (user: Profile): Boolean = {
     println ("Modify")

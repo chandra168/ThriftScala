@@ -58,23 +58,18 @@ class ThriftService extends Actor {
       sender ! HttpResponse (entity = HttpEntity (`text/html`, lines))
 
     case HttpRequest (GET, Uri.Path (path), headers, _, _) =>
-      println (path)
       val new_path = "client".concat (path);
+      println (new_path)
       val source = scala.io.Source.fromFile (new_path)
       val lines = source.mkString  
       source.close ()
       sender ! HttpResponse (entity = HttpEntity (`text/plain`, lines))
 
 
-
-      
-
     case HttpRequest (POST, Uri.Path ("/"), headers, entity: HttpEntity.NonEmpty, protocol) =>
+      println ("post request received")
       sender ! HttpResponse (entity = HttpEntity (`text/plain`, thriftRequest (entity.asString.getBytes)))
 
-      
-  
-
-    case _:HttpRequest => sender ! HttpResponse (status = 404, entity = "Unknonw resource!")
+    case _:HttpRequest => sender ! HttpResponse (status = 404, entity = "Unknown resource!")
   }
 }

@@ -33,6 +33,9 @@ function create_user () {
     if (result) {
       alert ("User Created");
     }
+    else {
+      alert ("problem creating user");
+    }
   } catch (e) {
     alert (e.why);
   }
