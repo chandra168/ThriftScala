@@ -15,7 +15,7 @@ class ProfileServiceImpl extends ProfileService.Iface {
 
   private def getUser (uid: String) : Option[Profile] = {
     try {
-       val source = scala.io.Source.fromFile (uid)
+       val source = scala.io.Source.fromFile (prefix + uid)
        val bytearray = source.map (_.toByte).toArray
        source.close ()
 
@@ -76,8 +76,8 @@ class ProfileServiceImpl extends ProfileService.Iface {
      println ("Login")
 
      getUser (uid) match {
-       case Some (user) => user
-       case None => new Profile
+       case Some (user) if password == user.password => println ("login successfull"); user
+       case None => println ("login failed"); new Profile
      }
   }
 
