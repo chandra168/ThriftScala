@@ -1,0 +1,14 @@
+.login_div_style {
+  display: block;
+}
+
+.user_div_style {
+  display: none;
+}
+
+
+.results_div_style {
+  top: 50px;
+  text-align: center;
+  width: 100%;
+}

@@ -13,13 +13,47 @@
 
     <script type="text/javascript" src="./lib/js/jquery-1.5.2.js"></script>
 
-    <div id="login_div">
-    <form action="javascript" onsubmit="return create_user ();">
-    Username : <input type="text" id="login_username" name="username"/>
-    Password : <input type="text" id="login_password" name="password"/>
-    <input type="submit" value="Login"/>
-    </form>
+    <link href="./main.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Results div -->
+    <div id="results_div" class="results_div_style">                                            
+      <form name="view_form">                                                                 
+        <table align= "center">
+          <tr align="center">
+            <td align="center">
+            <input type="radio" id="login_prompt_radio" name="r_view" value="top down" checked="checked" onclick= "login_prompt ();">
+            <b>Login</b>
+            </input>
+            </td>
+            <td align="center">
+            <input type="radio" id="new_user_radio" name="r_view" value="bottom up" onclick= "user_prompt ();">
+            <b>New User</b>
+            </input>
+            </td>
+          </tr>
+        </table> 
+      </form>                                                                                 
     </div>
 
+    <div id="login_div" class="login_div_style">
+      <form action="javascript" onsubmit="return login_user ();">
+        Username : <input type="text" id="login_username" name="username"/> <br/>
+        Password : <input type="text" id="login_password" name="password"/> <br/> <br/>
+                   <input type="submit" value="Login"/>
+      </form>
+    </div>
+
+    <div id="user_div" class="user_div_style">
+      <form action="javascript" onsubmit="return false;">
+        Username : <input type="text" id="detail_username" name="username"/> <br/>
+        Password : <input type="text" id="detail_password" name="password"/> <br/>
+        Name     : <input type="text" id="detail_name"     name="name"/>     <br/>
+        Email    : <input type="text" id="detail_email"    name="email"/>    <br/> <br/>
+        <input type="submit" id="create_button" value="Create" onclick="create_user ()" />
+        <input type="submit" id="modify_button" value="Modify" onclick="modify_user ()" disabled/>
+        <input type="submit" id="delete_button" value="Delete" onclick="delete_user ()" disabled/>
+        <input type="submit" id="logout_button" value="Logout" onclick="logout_user ()" disabled/>
+      </form>
+    </div>
   </BODY>
 </HTML>
