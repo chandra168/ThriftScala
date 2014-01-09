@@ -182,9 +182,13 @@ ProfileService_login_args.prototype.write = function(output) {
 
 ProfileService_login_result = function(args) {
   this.success = null;
+  this.lerr = null;
   if (args) {
     if (args.success !== undefined) {
       this.success = args.success;
+    }
+    if (args.lerr !== undefined) {
+      this.lerr = args.lerr;
     }
   }
 };
@@ -210,9 +214,14 @@ ProfileService_login_result.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 0:
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.lerr = new LoginError();
+        this.lerr.read(input);
+      } else {
         input.skip(ftype);
-        break;
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -227,6 +236,11 @@ ProfileService_login_result.prototype.write = function(output) {
   if (this.success) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
     this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.lerr) {
+    output.writeFieldBegin('lerr', Thrift.Type.STRUCT, 1);
+    this.lerr.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -518,6 +532,9 @@ ProfileServiceClient.prototype.recv_login = function() {
   result.read(this.input);
   this.input.readMessageEnd();
 
+  if (null !== result.lerr) {
+    throw result.lerr;
+  }
   if (null !== result.success) {
     return result.success;
   }

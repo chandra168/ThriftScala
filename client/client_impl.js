@@ -80,7 +80,7 @@ function login_user () {
     login_view ();
     user_prompt ();
   } catch (e) {
-    alert (e.why);
+    alert (e.msg);
   }
 
   return false;
@@ -99,7 +99,7 @@ function create_user () {
       alert ("problem creating user");
     }
   } catch (e) {
-    alert (e.why);
+    alert (e.message);
   }
 
   return false;
@@ -118,7 +118,7 @@ function modify_user () {
     }
   }
   catch (e) {
-    alert (e.why);
+    alert (e.message);
   }
 }
 
@@ -135,7 +135,7 @@ function delete_user () {
     }
   }
   catch (e) {
-    alert (e.why);
+    alert (e.message);
   }
 }
 

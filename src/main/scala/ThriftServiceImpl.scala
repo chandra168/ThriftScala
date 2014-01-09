@@ -71,13 +71,12 @@ class ProfileServiceImpl extends ProfileService.Iface {
     }
   }
 
-  /* TODO : Change return type for failure */
   def login (uid: String, password: String): Profile = {
      println ("Login")
 
      getUser (uid) match {
-       case Some (user) if password == user.password => println ("login successfull"); user
-       case None => println ("login failed"); new Profile
+       case Some (user) if password == user.password =>  user
+       case _ => throw new LoginError ("Login Failure")
      }
   }
 
@@ -96,7 +95,7 @@ class ProfileServiceImpl extends ProfileService.Iface {
 
     getUser (user.uid) match {
       case Some(userdb) if userdb.password == user.password => deleteUser (user.uid)
-      case None => false
+      case _ => false
     }
   }
 }

@@ -4,4 +4,3 @@ struct Profile {
   3: string password;
   4: string email;
 }
-
