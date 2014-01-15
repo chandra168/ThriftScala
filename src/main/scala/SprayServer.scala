@@ -31,7 +31,11 @@ class ThriftService extends Actor {
       var outbuffer = new TMemoryBuffer (100);
       var outprotocol = new TJSONProtocol (outbuffer);
 
+      /*
       var processor = new ProfileService.Processor(new ProfileServiceImpl ())
+      processor.process (inprotocol, outprotocol)
+      */
+      var processor = new CalcService.Processor (new CalcServiceImpl ())
       processor.process (inprotocol, outprotocol)
 
       val output = new Array[Byte] (outbuffer.length)

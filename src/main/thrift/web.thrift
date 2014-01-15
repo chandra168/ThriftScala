@@ -10,3 +10,7 @@ service ProfileService {
   bool modify (1: user.Profile user),
   bool remove (1: user.Profile user)
 }
+
+service CalcService {
+  i32 add (1: i32 arg1, 2: i32 arg2)
+}
